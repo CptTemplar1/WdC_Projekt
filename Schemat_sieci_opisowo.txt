@@ -1,0 +1,49 @@
+Buduję projekt sieci w programie Packet Tracer. Opisz szczegółowo jak zrealizować każdy z poniższych punktów. Opisy dopasuj dla osoby, która nie zna się prawie w ogóle na sieciach, czyli opisz po kolei co kliknąć i co gdzie wpisać dla którego elementu sieci. Opisy mają być gotowym opisem z całą konfiguracją, żebym po prostu mógł skonfigurować swoją sieć od początku do końca na ich podstawie.
+
+Punkty do realizacji:
+    Adresacja
+    Podział na podsieci
+    VLANy
+    Serwer DHCP
+    Konfiguracja urządzeń pod kątem dostępu SSH.
+    Konfiguracja NTP oraz zarządzania i raportowania CISCO IOS.
+    Implementacja lokalnego SPAN.
+    Implementacja co najmniej jednej listy kontroli dostępu ACL wewnątrz zabezpieczonej sieci.
+
+
+SCHEMAT SIECI:
+3 routery R1, R2, R3 połączone łączem Serial DTE. 
+R1 Se3/0 - R3 Se3/0 
+R1 Se2/0 - R2 Se2/0
+R3 Se2/0 - R2 Se3/0
+
+Od każdego z routerów odchodzi połączenie do osobnego switcha S1, S2, S3.
+R1 Fa0/0 - S1 Fa0/1
+R2 Fa0/0 - S2 Fa0/1
+R3 Fa0/0 - S3 Fa0/1
+
+Do każdego ze switchy podłączone są urządzenia takie jak komputery PC, Laptopy, drukarki i serwery DHCP.
+S1 Fa0/2 - PC0 Fa0
+S1 Fa0/3 - PC1 Fa0
+S1 Fa0/4 - Laptop0 Fa0
+S1 Fa0/5 - DHCP1 Fa0
+S1 Fa0/6 - Printer0 0
+
+S2 Fa0/2 - PC2 Fa0
+S2 Fa0/3 - PC3 Fa0
+S2 Fa0/4 - Laptop1 Fa0
+S2 Fa0/5 - Printer1 0
+S2 Fa0/6 - DHCP2 Fa0
+
+S3 Fa0/2 - DHCP3 Fa0
+S3 Fa0/3 - Laptop2 Fa0
+S3 Fa0/4 - PC4 Fa0
+S3 Fa0/5 - Printer2 0
+
+Dodatkowo Switch S3 jest połączony do Sniffera, a Sniffer do switcha S4, czyli Sniffer jest na drodze między S3, a S4.
+S3 Fa0/6 - Sniffer Eth1
+Sniffer Eth0 - S4 Fa0/1
+
+Na koniec od switcha S4 odchodzi drukarka oraz PC.
+S4 Fa0/2 - PC5 Fa0
+S4 Fa0/3 - Printer3 0
