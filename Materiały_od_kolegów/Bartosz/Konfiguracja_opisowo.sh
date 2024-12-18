@@ -89,7 +89,6 @@ ip classless
 ip flow-export version 9
 
 tacacs-server host 193.168.1.3
-tacacs-server host 192.168.3.1
 tacacs-server key cisco
 
 logging 193.168.1.3
