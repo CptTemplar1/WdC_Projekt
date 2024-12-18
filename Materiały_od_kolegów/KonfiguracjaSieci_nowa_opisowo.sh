@@ -77,7 +77,6 @@ router rip
  network 4.0.0.0
  network 5.0.0.0
  network 192.168.1.0
- network 192.168.2.0
  network 193.168.1.0
  network 194.168.1.0
  network 195.168.1.0
@@ -125,14 +124,16 @@ no service timestamps log datetime msec
 no service timestamps debug datetime msec
 service password-encryption
 
-hostname Router
+hostname R1
 
-enable password 7 0822455D0A16
+enable password class
 
 no ip cef
 no ipv6 cef
 
 license udi pid CISCO1941/K9 sn FTX1524HY87-
+
+ip domain-name r1
 
 spanning-tree mode pvst
 
@@ -168,8 +169,10 @@ interface Serial0/0/1
  ip address 2.0.0.1 255.0.0.0
  exit
 
+#do konfiguracji DMZ
 interface Serial0/1/0
- ip address 6.0.0.1 255.0.0.0
+ no ip address
+ clock rate 2000000
  exit
 
 interface Serial0/1/1
@@ -188,9 +191,7 @@ router rip
  network 3.0.0.0
  network 4.0.0.0
  network 5.0.0.0
- network 6.0.0.0
  network 192.168.1.0
- network 192.168.2.0
  network 193.168.1.0
  network 194.168.1.0
  network 195.168.1.0
@@ -202,7 +203,7 @@ ip classless
 ip flow-export version 9
 
 line con 0
- password 7 0822455D0A16
+ password cisco
  login
  exit
 
@@ -210,19 +211,19 @@ line aux 0
  exit
 
 line vty 0 4
- password 7 0822455D0A16
+ password cisco
  login
  exit
 
 line vty 5 15
- password 7 0822455D0A16
+ password cisco
  login
  exit
 
 end
 
 
-#Router2
+#R2
 enable
 configure terminal
 
@@ -230,18 +231,18 @@ no service timestamps log datetime msec
 no service timestamps debug datetime msec
 service password-encryption
 
-hostname Router2
+hostname R2
 
-enable password 7 0822455D0A16
+enable password class
 
 no ip cef
 no ipv6 cef
 
-username cisco secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+username cisco secret cisco
 
 license udi pid CISCO1941/K9 sn FTX15246M6S-
 
-ip domain-name router2
+ip domain-name r2
 
 spanning-tree mode pvst
 
@@ -266,6 +267,10 @@ interface Serial0/0/1
  ip address 3.0.0.1 255.0.0.0
  exit
 
+ interface Serial0/1/0
+ ip address 7.0.0.1 255.0.0.0
+ exit
+
 interface Vlan1
  no ip address
  shutdown
@@ -277,23 +282,19 @@ router rip
  network 3.0.0.0
  network 4.0.0.0
  network 5.0.0.0
- network 172.16.0.0
  network 192.168.1.0
- network 192.168.2.0
  network 193.168.1.0
  network 194.168.1.0
  network 195.168.1.0
  network 196.168.10.0
  network 196.168.20.0
- network 197.168.1.0
- network 198.168.1.0
  exit
 
 ip classless
 ip flow-export version 9
 
 line con 0
- password 7 0822455D0A16
+ password cisco
  login
  exit
 
@@ -301,13 +302,13 @@ line aux 0
  exit
 
 line vty 0 4
- password 7 0822455D0A16
+ password cisco
  login local
  transport input ssh
  exit
 
 line vty 5 15
- password 7 0822455D0A16
+ password cisco
  login
  exit
 
