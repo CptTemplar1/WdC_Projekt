@@ -1,4 +1,4 @@
-KONFIGURACJA URZĄDZEŃ SIECIOWYCH
+KONFIGURACJA URZĄDZEŃ SIECIOWYCH BARTOSZA
 
 ############################################################################################################
 #Centrum
