@@ -51,13 +51,6 @@ interface GigabitEthernet0/0
  no shutdown
  exit
 
-interface GigabitEthernet0/1
- no ip address
- duplex auto
- speed auto
- shutdown
- exit
-
 interface Serial0/0/0
  ip address 1.0.0.2 255.0.0.0
  no shutdown
@@ -97,6 +90,7 @@ router rip
  network 195.168.1.0
  network 196.168.10.0
  network 196.168.20.0
+ network 197.168.10.0
  exit
 
 ip classless
@@ -171,12 +165,11 @@ interface GigabitEthernet0/0.20
  no shutdown
  exit
 
+#Interfejs zewnętrzny (połączony z ASA0)
 interface GigabitEthernet0/1
- no ip address
- duplex auto
- speed auto
+ description To ASA0
+ ip address 197.168.10.1 255.255.255.0
  no shutdown
- exit
 
 interface Serial0/0/0
  ip address 1.0.0.1 255.0.0.0
@@ -217,6 +210,7 @@ router rip
  network 195.168.1.0
  network 196.168.10.0
  network 196.168.20.0
+ network 197.168.10.0
  exit
 
 ip classless
@@ -313,6 +307,7 @@ router rip
  network 195.168.1.0
  network 196.168.10.0
  network 196.168.20.0
+ network 197.168.10.0
  exit
 
 ip classless
@@ -420,6 +415,7 @@ router rip
  network 195.168.1.0
  network 196.168.10.0
  network 196.168.20.0
+ network 197.168.10.0
  exit
 
 ip classless
@@ -707,7 +703,6 @@ interface Vlan1
 
 router rip
  network 7.0.0.0
- network 197.168.1.0
  network 198.168.1.0
  exit
 
@@ -1043,3 +1038,127 @@ line vty 5 15
  exit
 
 end
+
+
+############################################################################################################
+#DMZ
+#ASA0
+enable
+configure terminal
+
+hostname ASA0
+
+enable password class
+
+interface GigabitEthernet1/1
+ nameif inside
+ security-level 100
+ ip address 197.168.10.2 255.255.255.0
+ no shutdown
+
+interface GigabitEthernet1/2
+ nameif outside
+ security-level 0
+ ip address 203.0.113.1 255.255.255.0
+ no shutdown
+
+interface GigabitEthernet1/3
+ nameif dmz
+ security-level 50
+ ip address 197.168.20.1 255.255.255.0
+ no shutdown
+
+#Konfiguracja tras statycznych
+route outside 0.0.0.0 0.0.0.0 203.0.113.2
+route inside 197.168.1.0 255.255.255.0 197.168.10.1
+
+#Konfiguracja NAT
+object network obj_internal
+ subnet 197.168.1.0 255.255.255.0
+ nat (inside,outside) dynamic interface
+
+object network obj_dmz
+ subnet 197.168.20.0 255.255.255.0
+ nat (dmz,outside) dynamic interface
+
+#Dostęp dla ruchu z DMZ do zewnętrznej sieci
+access-list ACL_DMZ_OUTSIDE extended permit tcp any any eq 80
+access-list ACL_DMZ_OUTSIDE extended permit tcp any any eq 443
+access-group ACL_DMZ_OUTSIDE in interface dmz
+
+#Dostęp dla ruchu z zewnętrznej sieci do DMZ (ograniczony do serwisów)
+access-list ACL_OUTSIDE_DMZ extended permit tcp any object obj_dmz eq 80
+access-list ACL_OUTSIDE_DMZ extended permit tcp any object obj_dmz eq 443
+access-group ACL_OUTSIDE_DMZ in interface outside
+
+#Zakończenie konfiguracji
+exit
+write memory
+
+
+
+#S11 (OUTSIDE)
+enable
+configure terminal
+
+interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+
+interface FastEthernet0/3
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+
+interface FastEthernet0/4
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+
+#Tworzenie VLAN 10 (dla sieci zewnętrznej)
+vlan 10
+ name Outside_Network
+
+#Zakończenie konfiguracji
+exit
+write memory
+
+
+
+#S12 (DMZ)
+enable
+configure terminal
+
+interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+
+interface FastEthernet0/2
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+
+interface FastEthernet0/3
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+
+interface FastEthernet0/4
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+
+#Tworzenie VLAN 20 (dla DMZ)
+vlan 20
+ name DMZ_Network
+
+#Zakończenie konfiguracji
+exit
+write memory
