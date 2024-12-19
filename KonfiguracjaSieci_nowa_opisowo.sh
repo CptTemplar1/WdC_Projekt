@@ -20,8 +20,6 @@ no ipv6 cef
 
 username cisco secret cisco
 
-license udi pid CISCO1941/K9 sn FTX1524PNC4-
-
 ip domain-name r0
 
 spanning-tree mode pvst
@@ -93,7 +91,6 @@ router rip
  network 197.168.10.0
  exit
 
-ip classless
 ip flow-export version 9
 
 #TACAACS+
@@ -123,6 +120,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 #R1
@@ -139,8 +137,6 @@ enable password class
 
 no ip cef
 no ipv6 cef
-
-license udi pid CISCO1941/K9 sn FTX1524HY87-
 
 ip domain-name r1
 
@@ -213,7 +209,6 @@ router rip
  network 197.168.10.0
  exit
 
-ip classless
 ip flow-export version 9
 
 line con 0
@@ -235,6 +230,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 #R2
@@ -253,8 +249,6 @@ no ip cef
 no ipv6 cef
 
 username cisco secret cisco
-
-license udi pid CISCO1941/K9 sn FTX15246M6S-
 
 ip domain-name r2
 
@@ -310,7 +304,6 @@ router rip
  network 197.168.10.0
  exit
 
-ip classless
 ip flow-export version 9
 
 line con 0
@@ -333,6 +326,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 
@@ -354,8 +348,6 @@ no ip cef
 no ipv6 cef
 
 username cisco secret cisco
-
-license udi pid CISCO2911/K9 sn FTX1524KB94-
 
 spanning-tree mode pvst
 
@@ -418,7 +410,6 @@ router rip
  network 197.168.10.0
  exit
 
-ip classless
 ip flow-export version 9
 
 line con 0
@@ -432,6 +423,7 @@ line vty 0 4
  exit
 
 end
+write memory
 
 
 #S2
@@ -445,7 +437,6 @@ no service password-encryption
 hostname S2
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface Vlan1
  no ip address
@@ -464,6 +455,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 #S3
@@ -477,7 +469,6 @@ no service password-encryption
 hostname S3
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface Vlan1
  no ip address
@@ -496,6 +487,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 
@@ -516,7 +508,6 @@ ip domain-name s0
 username cisco secret cisco
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 #NTP
 ntp server 193.168.1.3
@@ -551,6 +542,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 
@@ -569,7 +561,6 @@ hostname S1
 enable password class
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface FastEthernet0/1
  switchport mode trunk
@@ -621,6 +612,8 @@ line vty 5 15
  exit
 
 end
+write memory
+
 
 
 ############################################################################################################
@@ -642,7 +635,6 @@ no ipv6 cef
 
 username cisco secret cisco
 
-license udi pid CISCO1941/K9 sn FTX1524B1Z1-
 #ZPF wymaga tej paczki
 license boot module c1900 technology-package securityk9
 
@@ -706,7 +698,6 @@ router rip
  network 198.168.1.0
  exit
 
-ip classless
 ip route 0.0.0.0 0.0.0.0 10.2.2.2 
 
 ip flow-export version 9
@@ -724,6 +715,7 @@ line vty 0 4
  exit
 
 end
+write memory
 
 
 #S10
@@ -737,7 +729,6 @@ no service password-encryption
 hostname S10
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface FastEthernet0/1
  no shutdown
@@ -764,6 +755,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 ############################################################################################################
@@ -785,7 +777,6 @@ monitor session 1 source interface Fa0/1
 monitor session 1 destination interface Fa0/2
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface Vlan1
  ip address 194.168.1.2 255.255.255.0
@@ -810,6 +801,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 
@@ -829,7 +821,6 @@ no ip domain-lookup
 
 #STP
 spanning-tree mode pvst
-spanning-tree extend system-id
 spanning-tree vlan 1 root primary
 
 interface Vlan1
@@ -850,6 +841,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 #S5
@@ -866,7 +858,6 @@ no ip domain-lookup
 
 #STP
 spanning-tree mode pvst
-spanning-tree extend system-id
 spanning-tree vlan 1 root secondary
 
 interface FastEthernet0/2
@@ -895,6 +886,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 
@@ -911,7 +903,6 @@ hostname S6
 no ip domain-lookup
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface FastEthernet0/3
  spanning-tree guard root
@@ -935,6 +926,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 
@@ -951,7 +943,6 @@ hostname S7
 no ip domain-lookup
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface FastEthernet0/1
  exit
@@ -986,6 +977,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 
@@ -1002,7 +994,6 @@ hostname S8
 no ip domain-lookup
 
 spanning-tree mode pvst
-spanning-tree extend system-id
 
 interface FastEthernet0/1
  exit
@@ -1038,6 +1029,7 @@ line vty 5 15
  exit
 
 end
+write memory
 
 
 ############################################################################################################
@@ -1055,18 +1047,21 @@ interface GigabitEthernet1/1
  security-level 100
  ip address 197.168.10.2 255.255.255.0
  no shutdown
+ exit
 
 interface GigabitEthernet1/2
  nameif outside
  security-level 0
  ip address 203.0.113.1 255.255.255.0
  no shutdown
+ exit
 
 interface GigabitEthernet1/3
  nameif dmz
  security-level 50
  ip address 197.168.20.1 255.255.255.0
  no shutdown
+ exit
 
 #Konfiguracja tras statycznych
 route outside 0.0.0.0 0.0.0.0 203.0.113.2
@@ -1101,25 +1096,31 @@ write memory
 enable
 configure terminal
 
+hostname S11
+
 interface FastEthernet0/1
  switchport mode access
  switchport access vlan 10
  no shutdown
+ exit
 
 interface FastEthernet0/2
  switchport mode access
  switchport access vlan 10
  no shutdown
+ exit
 
 interface FastEthernet0/3
  switchport mode access
  switchport access vlan 10
  no shutdown
+ exit
 
 interface FastEthernet0/4
  switchport mode access
  switchport access vlan 10
  no shutdown
+ exit
 
 #Tworzenie VLAN 10 (dla sieci zewnętrznej)
 vlan 10
@@ -1135,25 +1136,31 @@ write memory
 enable
 configure terminal
 
+hostname S12
+
 interface FastEthernet0/1
  switchport mode access
  switchport access vlan 20
  no shutdown
+ exit
 
 interface FastEthernet0/2
  switchport mode access
  switchport access vlan 20
  no shutdown
+ exit
 
 interface FastEthernet0/3
  switchport mode access
  switchport access vlan 20
  no shutdown
+ exit
 
 interface FastEthernet0/4
  switchport mode access
  switchport access vlan 20
  no shutdown
+ exit
 
 #Tworzenie VLAN 20 (dla DMZ)
 vlan 20
