@@ -314,9 +314,15 @@ enable password class
 no ip cef
 no ipv6 cef
 
-username cisco secret cisco
 
+#SSH
 ip domain-name r2
+username cisco secret cisco
+crypto key generate rsa general-keys modulus 1024
+line vty 0 4
+ transport input ssh
+ login local
+ exit
 
 spanning-tree mode pvst
 
@@ -380,12 +386,6 @@ line con 0
 line aux 0
  exit
 
-line vty 0 4
- password cisco
- login local
- transport input ssh
- exit
-
 line vty 5 15
  password cisco
  login
@@ -398,7 +398,7 @@ write memory
 
 ############################################################################################################
 #ACL
-#Router3
+#R3
 enable
 configure terminal
 
@@ -422,28 +422,23 @@ access-list 100 permit icmp any any
 access-list 100 deny ip any 196.168.10.0 0.0.0.255
 access-list 100 deny ip 196.168.10.0 0.0.0.255 any
 access-list 100 permit ip any any
+interface GigabitEthernet0/1
+ ip address 196.168.10.1 255.255.255.0
+ ip access-group 100 in
+ no shutdown
+ exit
+interface GigabitEthernet0/2
+ ip address 196.168.20.1 255.255.255.0
+ ip access-group 100 in
+ no shutdown
+ exit
+
 
 interface GigabitEthernet0/0
  no ip address
  duplex auto
  speed auto
  shutdown
- exit
-
-interface GigabitEthernet0/1
- ip address 196.168.10.1 255.255.255.0
- ip access-group 100 in
- duplex auto
- speed auto
- no shutdown
- exit
-
-interface GigabitEthernet0/2
- ip address 196.168.20.1 255.255.255.0
- ip access-group 100 in
- duplex auto
- speed auto
- no shutdown
  exit
 
 interface Serial0/3/0
@@ -558,7 +553,7 @@ write memory
 
 
 ############################################################################################################
-#DHCP, NTP, CISCO IOS, TACACS+
+#DHCP, SSH, NTP, CISCO IOS, TACACS+
 #S0
 enable
 configure terminal
@@ -569,9 +564,15 @@ hostname S0
 
 enable password class
 
+#SSH
 ip domain-name s0
-
 username cisco secret cisco
+crypto key generate rsa general-keys modulus 1024
+line vty 0 15
+ transport input ssh
+ login local
+ exit
+
 
 spanning-tree mode pvst
 
@@ -593,18 +594,6 @@ ip default-gateway 193.168.1.1
 line con 0
  password cisco
  login
- exit
-
-line vty 0 4
- password cisco
- login local
- transport input ssh
- exit
-
-line vty 5 15
- password cisco
- login local
- transport input ssh
  exit
 
 end
@@ -701,12 +690,10 @@ no ipv6 cef
 
 username cisco secret cisco
 
-#ZPF wymaga tej paczki
-license boot module c1900 technology-package securityk9
-
 spanning-tree mode pvst
 
-#ZPF
+#ZPF (wymaga tej paczki)
+license boot module c1900 technology-package securityk9
 zone security IN-ZONE
  exit
 zone security OUT-ZONE
@@ -728,8 +715,6 @@ interface GigabitEthernet0/0
  ip address 198.168.1.1 255.255.255.0
  #ZPF
  zone-member security IN-ZONE
- duplex auto
- speed auto
  no shutdown
  exit
 
